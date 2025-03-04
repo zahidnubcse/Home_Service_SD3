@@ -14,3 +14,6 @@ export default {
   },
   plugins: [],
 };
+
+
+/* Add this to your global CSS or inside your Tailwind config */
