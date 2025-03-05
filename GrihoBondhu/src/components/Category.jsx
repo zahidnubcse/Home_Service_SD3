@@ -1,0 +1,42 @@
+import EMISection from '../components/EMISection'// Adjust the import path accordingly
+
+const ServiceCategories = () => {
+  const categories = [
+    { name: "Home Cleaning", icon: "🧹" },
+    { name: "Plumbing", icon: "🔧" },
+    { name: "Car Repair", icon: "🚗" },
+    { name: "Home Security", icon: "🔒" },
+    { name: "Electrical Services", icon: "⚡" },
+    { name: "Painting", icon: "🎨" },
+    { name: "Appliance Repair", icon: "🔌" },
+    { name: "Pest Control", icon: "🐜" },
+    { name: "Gardening", icon: "🌿" },
+    { name: "Moving & Shifting", icon: "📦" },
+    { name: "Interior Design", icon: "🏠" },
+    { name: "Carpet Cleaning", icon: "🛋️" },
+  ];
+
+  return (
+    <div className="p-6 min-h-screen">
+      <h2 className="text-2xl font-bold text-center mb-6">
+        Explore Our <span className="text-primary">Providing Services</span>
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-1">
+        {categories.map((category, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center p-4 bg-teal-100 rounded-xl shadow-md hover:shadow-lg transition-all hover:bg-primary cursor-pointer"
+          >
+            <span className="text-4xl">{category.icon}</span>
+            <h3 className="mt-2 text-lg font-semibold">{category.name}</h3>
+          </div>
+        ))}
+      </div>
+
+      {/* EMI Section */}
+      <EMISection/>
+    </div>
+  );
+};
+
+export default ServiceCategories;

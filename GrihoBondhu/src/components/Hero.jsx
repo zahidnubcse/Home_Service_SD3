@@ -11,7 +11,7 @@ const Hero = () => {
             </h2>
 
             {/* Subheading */}
-            <h2 className="text-xl text-gray-600 mt-4">
+            <h2 className="p-6 text-xl text-gray-600 mt-4">
                 Explore Our Best Home Service & Repair Near You
             </h2>
 

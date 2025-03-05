@@ -13,7 +13,7 @@ const NoticeBar = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto  p-6">
       <div className="bg-primary text-white py-2 overflow-hidden relative mt-4 rounded-sm">
         <div className="whitespace-nowrap animate-marquee">
           {notices.map((notice, index) => (
