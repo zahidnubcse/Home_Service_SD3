@@ -4,6 +4,9 @@ import NoticeBar from "../components/NoticeBar";
 import ServiceCategories from "../components/Category";
 import RecommendedService from "../components/RecommendedService";
 import EMISection from "../components/EMISection";
+import PolicySection from "../components/Policy";
+import CustomerReviews from "../components/CustomersReviews";
+
 
 const Home = () => {
   return (
@@ -13,6 +16,8 @@ const Home = () => {
       <ServiceCategories />
       <EMISection/>
       <RecommendedService/>
+      <PolicySection/>
+      <CustomerReviews/>
     </div>
   );
 };

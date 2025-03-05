@@ -18,7 +18,7 @@ const RecommendedService = () => {
         Recommended <span className="text-primary">Services</span>
       </h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
         {services.map((service) => (
           <div
             key={service.id}
@@ -35,7 +35,12 @@ const RecommendedService = () => {
           </div>
         ))}
       </div>
+      <div className="p-4 flex items-center justify-center">
+  <button className="bg-primary py-3 px-6 rounded-lg text-white items-center">See More</button>
+</div>
+
     </div>
+    
   );
 };
 
