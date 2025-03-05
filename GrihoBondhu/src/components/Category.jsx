@@ -1,5 +1,3 @@
-import EMISection from '../components/EMISection'// Adjust the import path accordingly
-
 const ServiceCategories = () => {
   const categories = [
     { name: "Home Cleaning", icon: "🧹" },
@@ -17,11 +15,11 @@ const ServiceCategories = () => {
   ];
 
   return (
-    <div className="p-6 min-h-screen">
+    <div className="p-6">
       <h2 className="text-2xl font-bold text-center mb-6">
         Explore Our <span className="text-primary">Providing Services</span>
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-1">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-0">
         {categories.map((category, index) => (
           <div
             key={index}
@@ -32,9 +30,6 @@ const ServiceCategories = () => {
           </div>
         ))}
       </div>
-
-      {/* EMI Section */}
-      <EMISection/>
     </div>
   );
 };

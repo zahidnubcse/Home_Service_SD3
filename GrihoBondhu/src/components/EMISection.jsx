@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { XIcon } from "@heroicons/react/outline"; // Importing the cross icon from Heroicons
+import { XIcon } from "@heroicons/react/outline";
 
 const EMISection = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,7 @@ const EMISection = () => {
   };
 
   return (
-    <div className="p-6 flex justify-center">
+    <div className="p-6 flex justify-center mt-0">
       <div
         onClick={toggleModal}
         className="w-full max-w-6xl mx-auto p-6 flex items-center justify-between bg-orange-400 text-white rounded-2xl shadow-lg cursor-pointer relative overflow-hidden"

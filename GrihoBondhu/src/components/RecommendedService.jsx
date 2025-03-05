@@ -5,32 +5,32 @@ import service3 from "../assets/service3.jpg";
 import service4 from "../assets/service4.jpg";
 
 const services = [
-  { id: 1, name: "Service 1", image: service1 },
-  { id: 2, name: "Service 2", image: service2 },
-  { id: 3, name: "Service 3", image: service3 },
-  { id: 4, name: "Service 4", image: service4 },
+  { id: 1, name: "Home Cleaning", image: service1 },
+  { id: 2, name: "Plumbing", image: service2 },
+  { id: 3, name: "Electric Service", image: service3 },
+  { id: 4, name: "Home Security", image: service4 },
 ];
 
 const RecommendedService = () => {
   return (
-    <div className="container mx-auto px-4 py-10">
+    <div className=" p-6 container mx-auto  py-10">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Recommended Services
+        Recommended <span className="text-primary">Services</span>
       </h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map((service) => (
           <div
             key={service.id}
-            className="bg-white shadow-md rounded-xl overflow-hidden transform transition duration-300 hover:scale-105"
+            className="bg-white shadow-md rounded-xl hover:shadow-primary overflow-hidden transform transition duration-300 hover:scale-105"
           >
             <img
               src={service.image}
               alt={service.name}
               className="w-full h-52 object-cover"
             />
-            <div className="p-4 text-center">
-              <h3 className="text-lg font-semibold text-gray-800">{service.name}</h3>
+            <div className="p-4 text-center bg-primary">
+              <h3 className="text-lg font-semibold text-white">{service.name}</h3>
             </div>
           </div>
         ))}

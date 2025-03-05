@@ -3,7 +3,7 @@ import Hero from "../components/Hero";
 import NoticeBar from "../components/NoticeBar";
 import ServiceCategories from "../components/Category";
 import RecommendedService from "../components/RecommendedService";
-//import EMISection from "../components/EMISection";
+import EMISection from "../components/EMISection";
 
 const Home = () => {
   return (
@@ -11,6 +11,7 @@ const Home = () => {
       <Hero />
       <NoticeBar />
       <ServiceCategories />
+      <EMISection/>
       <RecommendedService/>
     </div>
   );
