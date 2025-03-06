@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
@@ -6,6 +6,11 @@ const Login = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to top when page loads
+  }, []);
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clean from '../assets/clean_1.jpg' 
 import plumbing from '../assets/plum_1.jpg'
 import car from '../assets/car_1.jpg'
@@ -30,7 +30,13 @@ const services = [
   },
 ];
 
+
 const ServicesPage = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to top when page loads
+  }, []);
+  
   return (
     <div className="min-h-screen p-6 mt-20">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Our <span className="text-primary">Services</span></h1>
