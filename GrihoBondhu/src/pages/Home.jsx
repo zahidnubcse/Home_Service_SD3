@@ -6,6 +6,8 @@ import RecommendedService from "../components/RecommendedService";
 import EMISection from "../components/EMISection";
 import PolicySection from "../components/Policy";
 import CustomerReviews from "../components/CustomersReviews";
+import Newsletter from "../components/NewsLetterBox";
+import DownloadApp from "../components/DownloadApp";
 
 
 const Home = () => {
@@ -18,6 +20,8 @@ const Home = () => {
       <RecommendedService/>
       <PolicySection/>
       <CustomerReviews/>
+      <Newsletter/>
+      <DownloadApp/>
     </div>
   );
 };

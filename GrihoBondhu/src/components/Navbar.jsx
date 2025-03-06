@@ -16,7 +16,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6 text-gray-800">
+          <div className="hidden md:flex space-x-6 text-gray-800 font-medium">
             <Link to="/" className="hover:text-primary">Home</Link>
             <Link to="/services" className="hover:text-primary ">Services</Link>
             <Link to="/bookings" className="hover:text-primary">Bookings</Link>

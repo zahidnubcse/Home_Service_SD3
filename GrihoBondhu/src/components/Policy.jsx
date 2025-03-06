@@ -12,7 +12,7 @@ const policies = [
     description: "Our professionals are background-checked and highly skilled."
   },
   {
-    icon: <FaTools className="text-green-500 text-4xl" />, 
+    icon: <FaTools className="text-orange-700 text-4xl" />, 
     title: "Wide Range of Services", 
     description: "From cleaning to repair, we cover all home service needs."
   },
