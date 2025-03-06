@@ -4,7 +4,7 @@ import { FaFacebookF, FaGoogle, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <div className="bg-gradient-to-r from-teal-500 to-teal-700 text-white py-12 px-6">
+    <div className="bg-gradient-to-r from-teal-500 to-teal-700 text-white py-12 px-6 mt-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
         
         {/* Logo & Description */}
