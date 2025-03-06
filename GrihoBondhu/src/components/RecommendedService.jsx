@@ -3,6 +3,7 @@ import service1 from "../assets/service1.jpg";
 import service2 from "../assets/service2.jpg";
 import service3 from "../assets/service3.jpg";
 import service4 from "../assets/service4.jpg";
+import { Link } from "react-router-dom";
 
 const services = [
   { id: 1, name: "Home Cleaning", image: service1 },
@@ -36,7 +37,7 @@ const RecommendedService = () => {
         ))}
       </div>
       <div className="p-4 flex items-center justify-center">
-  <button className="bg-primary py-3 px-6 rounded-lg text-white items-center">See More</button>
+  <Link to='/services' className="bg-teal-400 hover:bg-primary py-3 px-6 rounded-lg text-white items-center font-outfit">See More</Link>
 </div>
 
     </div>
