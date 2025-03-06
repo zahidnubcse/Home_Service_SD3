@@ -4,20 +4,26 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
+import myVideo1 from "../assets/rev_1.mp4";
+import myVideo2 from '../assets/rev_2.mp4'
+import Thumbnail1 from "../assets/thum_1.jpg"; 
+import Thumbnail2 from '../assets/thum_2.jpg'
+ 
+
 const reviews = [
   {
     name: "Zabeen Yusuf Nur",
     profession: "IT Consultant, Australia",
     text: "Such service platforms are available in other countries. I’ve personally used those when I was abroad. I’m very pleased that such a portal is available here in Bangladesh as well.",
-    videoUrl: "https://www.youtube.com/embed/YOUR_VIDEO_ID",
-    thumbnail: "https://via.placeholder.com/400x250", // Replace with actual video thumbnail
+    videoUrl: myVideo1,
+    thumbnail: Thumbnail1,
   },
   {
     name: "John Doe",
     profession: "Software Engineer, USA",
     text: "The service was excellent! The team was professional and very efficient.",
-    videoUrl: "https://www.youtube.com/embed/YOUR_VIDEO_ID2",
-    thumbnail: "https://via.placeholder.com/400x250", // Replace with actual video thumbnail
+    videoUrl: myVideo2,
+    thumbnail: Thumbnail2,
   },
 ];
 
@@ -27,7 +33,7 @@ export default function CustomerReviews() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Real Happy Customers, <span className="text-primary"> Real Stories</span>
+        Real Happy Customers, <span className="text-primary">Real Stories</span>
       </h2>
 
       <Swiper
@@ -53,12 +59,12 @@ export default function CustomerReviews() {
             {/* Right: Video Thumbnail */}
             <div className="relative flex-1 pr-12">
               {selectedVideo === index ? (
-                <iframe
+                <video
                   className="w-full h-60 rounded-lg"
                   src={review.videoUrl}
-                  title="Customer Review Video"
-                  allowFullScreen
-                ></iframe>
+                  controls
+                  autoPlay
+                />
               ) : (
                 <div
                   className="relative cursor-pointer"
@@ -83,5 +89,3 @@ export default function CustomerReviews() {
     </div>
   );
 }
-
-  
