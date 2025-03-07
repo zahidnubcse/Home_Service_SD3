@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../assets/logo.png";
 import { FaFacebookF, FaGoogle, FaXTwitter } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -9,7 +10,9 @@ const Footer = () => {
         
         {/* Logo & Description */}
         <div className="text-center md:text-left">
-          <img src={logo} className="mb-4 w-32 mx-auto md:mx-0 hover:bg-white rounded-lg cursor-pointer" alt="Logo" />
+         <Link to='/'>
+         <img src={logo} className="mb-4 w-32 mx-auto md:mx-0 hover:bg-white rounded-lg cursor-pointer" alt="Logo" />
+         </Link>
           <p className="max-w-md mx-auto md:mx-0 opacity-90 leading-relaxed">
             Elevate your home service experience with ease. Fast, reliable, and professional solutions at your fingertips.
           </p>

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import clean from '../assets/clean_1.jpg' 
-import plumbing from '../assets/plum_1.jpg'
-import car from '../assets/car_1.jpg'
+import { useLocation } from "react-router-dom";
+import clean from "../assets/clean_1.jpg";
+import plumbing from "../assets/plum_1.jpg";
+import car from "../assets/car_1.jpg";
 
 const services = [
   {
@@ -30,34 +31,52 @@ const services = [
   },
 ];
 
-
 const ServicesPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const selectedCategory = queryParams.get("category");
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scrolls to top when page loads
   }, []);
-  
+
+  // Filter services based on the selected category
+  const filteredServices = selectedCategory
+    ? services.filter((service) => service.category === selectedCategory)
+    : services;
+
   return (
     <div className="min-h-screen p-6 mt-20">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Our <span className="text-primary">Services</span></h1>
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-        {services.map((service) => (
-          <div key={service.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-primary">
-            <img
-              src={service.image}
-              alt={service.name}
-              className="w-full h-40 object-cover rounded-lg"
-            />
-            <h2 className="text-xl font-semibold mt-4">{service.name}</h2>
-            <p className="text-gray-600">Category: {service.category}</p>
-            <p className="mt-2 text-gray-600">{service.description}</p>
-            <p className="mt-2 text-yellow-500 font-semibold">⭐ {service.rating}</p>
-            <button className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-lg w-full hover:bg-teal-600">
-              Book Now
-            </button>
-          </div>
-        ))}
-      </div>
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+        {selectedCategory ? `${selectedCategory} Services` : "Our Services"}
+      </h1>
+      {filteredServices.length > 0 ? (
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
+          {filteredServices.map((service) => (
+            <div
+              key={service.id}
+              className="bg-white p-4 rounded-lg shadow-md hover:shadow-primary"
+            >
+              <img
+                src={service.image}
+                alt={service.name}
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <h2 className="text-xl font-semibold mt-4">{service.name}</h2>
+              <p className="text-gray-600">Category: {service.category}</p>
+              <p className="mt-2 text-gray-600">{service.description}</p>
+              <p className="mt-2 text-yellow-500 font-semibold">
+                ⭐ {service.rating}
+              </p>
+              <button className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-lg w-full hover:bg-teal-600">
+                Book Now
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">No services available for this category.</p>
+      )}
     </div>
   );
 };

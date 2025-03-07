@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const ServiceCategories = () => {
+  const navigate = useNavigate(); // Hook to navigate
+
   const categories = [
     { name: "Home Cleaning", icon: "🧹" },
     { name: "Plumbing", icon: "🔧" },
@@ -14,6 +18,10 @@ const ServiceCategories = () => {
     { name: "Carpet Cleaning", icon: "🛋️" },
   ];
 
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/services?category=${encodeURIComponent(categoryName)}`);
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold text-center mb-6">
@@ -23,6 +31,7 @@ const ServiceCategories = () => {
         {categories.map((category, index) => (
           <div
             key={index}
+            onClick={() => handleCategoryClick(category.name)}
             className="flex flex-col items-center p-4 bg-teal-100 rounded-xl shadow-md hover:shadow-lg transition-all hover:bg-primary cursor-pointer"
           >
             <span className="text-4xl">{category.icon}</span>
