@@ -19,8 +19,8 @@ const reviews = [
     thumbnail: Thumbnail1,
   },
   {
-    name: "John Doe",
-    profession: "Software Engineer, USA",
+    name: "Zahid Hasan",
+    profession: "Software Engineer, BD",
     text: "The service was excellent! The team was professional and very efficient.",
     videoUrl: myVideo2,
     thumbnail: Thumbnail2,

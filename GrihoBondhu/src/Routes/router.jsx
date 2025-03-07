@@ -3,12 +3,14 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from './../layout/MainLayout';
 import Services from "../pages/Services";
 import Login from "../pages/Login";
+import ContactPage from '../pages/Contact'
 
 
 const mainRoutes =[
     { path: "/", element: <Home /> },
     { path:"/services", element:<Services/>},
-    { path:"/login", element:<Login/>}
+    { path:"/login", element:<Login/>},
+    { path: "/contact",element:<ContactPage/>},
 ];
 
 const router = createBrowserRouter([
