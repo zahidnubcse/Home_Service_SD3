@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";
 import car from "../assets/car_1.jpg";
+import pest from "../assets/pest_1.jpg";
+import home from "../assets/sg1.jpeg";
+import Electric from "../assets/elec_1.jpg";
+import Garden from "../assets/garden_1.jpg";
+import Interior from "../assets/int_1.jpg";
 
 const services = [
   {
@@ -29,6 +34,46 @@ const services = [
     rating: 4.9,
     image: car,
   },
+  {
+    id: 4,
+    name: "Pest Remove",
+    category: "Pest Control",
+    description: "Professional cleaning services for your home.",
+    rating: 4.8,
+    image: pest,
+  },
+  {
+    id: 5,
+    name: "House security",
+    category: "Home Security",
+    description: "Professional cleaning services for your home.",
+    rating: 4.8,
+    image: home,
+  },
+  {
+    id: 6,
+    name: "Home Waring",
+    category: "Electrical Services",
+    description: "Professional cleaning services for your home.",
+    rating: 4.8,
+    image: Electric,
+  },
+  {
+    id: 7,
+    name: "Easy to Make a Beautiful Garden",
+    category: "Gardening",
+    description: "Professional cleaning services for your home.",
+    rating: 4.8,
+    image: Garden,
+  },
+  {
+    id: 8,
+    name: "Best Interior Design",
+    category: "Interior Design",
+    description: "Professional cleaning services for your home.",
+    rating: 4.8,
+    image: Interior,
+  },
 ];
 
 const ServicesPage = () => {
@@ -48,8 +93,15 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen p-6 mt-20">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-        {selectedCategory ? `${selectedCategory} Services` : "Our Services"}
+        {selectedCategory ? (
+          `${selectedCategory} Services`
+        ) : (
+          <>
+            Our <span className="text-primary">Services</span>
+          </>
+        )}
       </h1>
+
       {filteredServices.length > 0 ? (
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
           {filteredServices.map((service) => (
@@ -75,7 +127,9 @@ const ServicesPage = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No services available for this category.</p>
+        <p className="text-center text-gray-500">
+          No services available for this category.
+        </p>
       )}
     </div>
   );
