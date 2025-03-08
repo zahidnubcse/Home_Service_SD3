@@ -37,7 +37,7 @@ const BookingPage = () => {
                 }`}
                 onClick={() => setSelectedPlan(plan)}
               >
-                {plan.charAt(0).toUpperCase() + plan.slice(1)} <br />${service.price?.[plan]}
+                {plan.charAt(0).toUpperCase() + plan.slice(1)} <br />৳{service.price?.[plan]}
               </button>
             ))}
           </div>
@@ -67,7 +67,7 @@ const BookingPage = () => {
           <div>
             <label className="block text-gray-700 font-semibold">Address</label>
             <input
-              type="email"
+              type="text"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Your Address"
               required
