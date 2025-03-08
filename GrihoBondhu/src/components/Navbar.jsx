@@ -19,7 +19,7 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6 text-gray-800 font-medium">
             <Link to="/" className="hover:text-primary">Home</Link>
             <Link to="/services" className="hover:text-primary ">Services</Link>
-            <Link to="/bookings" className="hover:text-primary">Bookings</Link>
+            <Link to="/booking" className="hover:text-primary">Bookings</Link>
             <Link to="/contact" className="hover:text-primary">Contact</Link>
           </div>
 
@@ -46,7 +46,7 @@ const Navbar = () => {
         <div className="md:hidden bg-white shadow-md">
           <Link to="/" className="block px-4 py-2 hover:bg-gray-100">Home</Link>
           <Link to="/services" className="block px-4 py-2 hover:bg-gray-100">Services</Link>
-          <Link to="/bookings" className="block px-4 py-2 hover:bg-gray-100">Bookings</Link>
+          <Link to="/booking" className="block px-4 py-2 hover:bg-gray-100">Bookings</Link>
           <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">Contact</Link>
           <button className="flex items-center px-4 py-2 bg-gray-200 w-full">
             <MapPin size={18} className="text-primary mr-1" />

@@ -4,6 +4,7 @@ import MainLayout from './../layout/MainLayout';
 import Services from "../pages/Services";
 import Login from "../pages/Login";
 import ContactPage from '../pages/Contact'
+import BookingPage from "../pages/BookingPage";
 
 
 const mainRoutes =[
@@ -11,6 +12,7 @@ const mainRoutes =[
     { path:"/services", element:<Services/>},
     { path:"/login", element:<Login/>},
     { path: "/contact",element:<ContactPage/>},
+    { path:"/booking", element:<BookingPage/>}
 ];
 
 const router = createBrowserRouter([
