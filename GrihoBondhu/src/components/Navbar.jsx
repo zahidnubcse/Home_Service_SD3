@@ -21,6 +21,7 @@ const Navbar = () => {
             <Link to="/services" className="hover:text-primary ">Services</Link>
             <Link to="/booking" className="hover:text-primary">Bookings</Link>
             <Link to="/contact" className="hover:text-primary">Contact</Link>
+            <Link to="/about" className="hover:text-primary">About</Link>
           </div>
 
           {/* Right Section: Location & Auth Buttons */}
@@ -48,6 +49,7 @@ const Navbar = () => {
           <Link to="/services" className="block px-4 py-2 hover:bg-gray-100">Services</Link>
           <Link to="/booking" className="block px-4 py-2 hover:bg-gray-100">Bookings</Link>
           <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">Contact</Link>
+          <Link to="/About" className="block px-4 py-2 hover:bg-gray-100">About</Link>
           <button className="flex items-center px-4 py-2 bg-gray-200 w-full">
             <MapPin size={18} className="text-primary mr-1" />
             Select Location
