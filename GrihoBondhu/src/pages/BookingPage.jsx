@@ -19,7 +19,11 @@ const BookingPage = () => {
 
         {/* Service Details */}
         <div className="mb-6 text-center">
-          <img src={service.image} alt={service.name} className="w-full h-40 object-cover rounded-lg mb-4" />
+          <img
+            src={service.image}
+            alt={service.name}
+            className="w-full h-40 object-cover rounded-lg mb-4"
+          />
           <h2 className="text-2xl font-semibold">{service.name}</h2>
           <p className="text-gray-600">{service.description}</p>
           <p className="text-yellow-500 font-semibold mt-2">⭐ {service.rating}</p>
@@ -33,11 +37,14 @@ const BookingPage = () => {
               <button
                 key={plan}
                 className={`p-3 rounded-lg text-center text-white font-semibold ${
-                  selectedPlan === plan ? "bg-teal-600" : "bg-teal-400 hover:bg-teal-500"
+                  selectedPlan === plan
+                    ? "bg-teal-600"
+                    : "bg-teal-400 hover:bg-teal-500"
                 }`}
                 onClick={() => setSelectedPlan(plan)}
               >
-                {plan.charAt(0).toUpperCase() + plan.slice(1)} <br />৳{service.price?.[plan]}
+                {plan.charAt(0).toUpperCase() + plan.slice(1)} <br />
+                ৳{service.price?.[plan]}
               </button>
             ))}
           </div>
@@ -84,7 +91,7 @@ const BookingPage = () => {
           </div>
 
           <button className="w-full bg-teal-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-teal-600 transition">
-            Confirm Booking (${service.price?.[selectedPlan]})
+            Confirm Booking (৳{service.price?.[selectedPlan]})
           </button>
         </form>
       </div>
