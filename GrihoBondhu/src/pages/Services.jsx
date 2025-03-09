@@ -1,11 +1,12 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";
 import car from "../assets/car_1.jpg";
 import pest from "../assets/pest_1.jpg";
 import clean1 from "../assets/clean_2.jpg";
 
+// Dummy services data
 const services = [
   {
     id: 1,
@@ -55,34 +56,64 @@ const services = [
 ];
 
 const ServicesPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
+  // Get search query from URL
+  const queryParams = new URLSearchParams(location.search);
+  const searchQuery = queryParams.get("search")?.toLowerCase() || "";
+
+  // Filter services based on search query
+  const filteredServices = services.filter((service) =>
+    service.name.toLowerCase().includes(searchQuery)
+  );
+
+  // Navigate to the service details page
   const handleServiceClick = (id) => {
     navigate(`/details/${id}`);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page on render
+  }, []);
+
   return (
     <div className="min-h-screen p-6 mt-20">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-        Our <span className="text-primary">Services</span>
+        {searchQuery ? `Search Results for "${searchQuery}"` : "Our Services"}
       </h1>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-        {services.map((service) => (
-          <div key={service.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-primary">
-            <img src={service.image} alt={service.name} className="w-full h-40 object-cover rounded-lg" />
-            <h2 className="text-xl font-semibold mt-4">{service.name}</h2>
-            <p className="text-gray-600">Category: {service.category}</p>
-            <p className="mt-2 text-gray-600">{service.description}</p>
-            <p className="mt-2 text-yellow-500 font-semibold">⭐ {service.rating}</p>
-            <button
-              className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-lg w-full hover:bg-teal-600"
-              onClick={() => handleServiceClick(service.id)}
+        {filteredServices.length > 0 ? (
+          filteredServices.map((service) => (
+            <div
+              key={service.id}
+              className="bg-white p-4 rounded-lg shadow-md hover:shadow-primary"
             >
-              View Details
-            </button>
-          </div>
-        ))}
+              <img
+                src={service.image}
+                alt={service.name}
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <h2 className="text-xl font-semibold mt-4">{service.name}</h2>
+              <p className="text-gray-600">Category: {service.category}</p>
+              <p className="mt-2 text-gray-600">{service.description}</p>
+              <p className="mt-2 text-yellow-500 font-semibold">
+                ⭐ {service.rating}
+              </p>
+              <button
+                className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-lg w-full hover:bg-teal-600"
+                onClick={() => handleServiceClick(service.id)}
+              >
+                View Details
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 col-span-3">
+            No services found for "{searchQuery}".
+          </p>
+        )}
       </div>
     </div>
   );
