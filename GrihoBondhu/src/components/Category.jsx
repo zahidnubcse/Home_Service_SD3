@@ -21,6 +21,7 @@ const ServiceCategories = () => {
   const handleCategoryClick = (categoryName) => {
     navigate(`/services?category=${encodeURIComponent(categoryName)}`);
   };
+  
 
   return (
     <div className="p-6">

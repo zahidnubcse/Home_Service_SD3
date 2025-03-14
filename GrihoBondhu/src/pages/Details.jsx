@@ -70,7 +70,7 @@ const ServiceDetailsPage = () => {
 
   return (
     <div className="min-h-screen p-6 mt-20">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white p-6 rounded-lg">
         <h1 className="text-3xl font-bold">{service.name}</h1>
 
         {/* Image and Service Details Section */}

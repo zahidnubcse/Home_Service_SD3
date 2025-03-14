@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";
@@ -8,64 +8,26 @@ import clean1 from "../assets/clean_2.jpg";
 
 // Dummy services data
 const services = [
-  {
-    id: 1,
-    name: "Home Cleaning",
-    category: "Home Cleaning",
-    description: "Professional home cleaning services.",
-    rating: 4.8,
-    image: clean,
-    price: { regular: 20, standard: 35, premium: 50 },
-  },
-  {
-    id: 2,
-    name: "Plumbing Repair",
-    category: "Plumbing",
-    description: "Expert plumbing repair services.",
-    rating: 4.7,
-    image: plumbing,
-    price: { regular: 25, standard: 40, premium: 60 },
-  },
-  {
-    id: 3,
-    name: "Car Engine Repair",
-    category: "Car Repair",
-    description: "Reliable car repair services.",
-    rating: 4.9,
-    image: car,
-    price: { regular: 30, standard: 50, premium: 70 },
-  },
-  {
-    id: 4,
-    name: "Pest Control",
-    category: "Pest Control",
-    description: "Safe pest control services.",
-    rating: 4.6,
-    image: pest,
-    price: { regular: 15, standard: 30, premium: 45 },
-  },
-  {
-    id: 5,
-    name: "Kitchen Cleaning",
-    category: "Home Cleaning",
-    description: "Professional home cleaning services.",
-    rating: 4.8,
-    image: clean1,
-    price: { regular: 20, standard: 35, premium: 50 },
-  },
+  { id: 1, name: "Home Cleaning", category: "Home Cleaning", description: "Professional home cleaning services.", rating: 4.8, image: clean, price: { regular: 20, standard: 35, premium: 50 } },
+  { id: 2, name: "Plumbing Repair", category: "Plumbing", description: "Expert plumbing repair services.", rating: 4.7, image: plumbing, price: { regular: 25, standard: 40, premium: 60 } },
+  { id: 3, name: "Car Engine Repair", category: "Car Repair", description: "Reliable car repair services.", rating: 4.9, image: car, price: { regular: 30, standard: 50, premium: 70 } },
+  { id: 4, name: "Pest Control", category: "Pest Control", description: "Safe pest control services.", rating: 4.6, image: pest, price: { regular: 15, standard: 30, premium: 45 } },
+  { id: 5, name: "Kitchen Cleaning", category: "Home Cleaning", description: "Professional home cleaning services.", rating: 4.8, image: clean1, price: { regular: 20, standard: 35, premium: 50 } },
 ];
 
 const ServicesPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Get search query from URL
+  
+  // Get search and category query parameters from URL
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("search")?.toLowerCase() || "";
+  const selectedCategory = queryParams.get("category") || "";
 
-  // Filter services based on search query
-  const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchQuery)
+  // Filter services based on search query or category
+  const filteredServices = services.filter((service) => 
+    (searchQuery ? service.name.toLowerCase().includes(searchQuery) : true) &&
+    (selectedCategory ? service.category === selectedCategory : true)
   );
 
   // Navigate to the service details page
@@ -80,7 +42,11 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen p-6 mt-20">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-        {searchQuery ? `Search Results for "${searchQuery}"` : "Our Services"}
+        {selectedCategory
+          ? `Services for "${selectedCategory}"`
+          : searchQuery
+          ? `Search Results for "${searchQuery}"`
+          : "Our Services"}
       </h1>
 
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
@@ -111,7 +77,7 @@ const ServicesPage = () => {
           ))
         ) : (
           <p className="text-center text-gray-500 col-span-3">
-            No services found for "{searchQuery}".
+            No services found {selectedCategory ? `for "${selectedCategory}"` : ""}.
           </p>
         )}
       </div>
