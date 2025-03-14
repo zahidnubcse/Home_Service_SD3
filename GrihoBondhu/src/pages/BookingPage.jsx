@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import visaIcon from "../assets/visa_icon.png";
+import bkashIcon from "../assets/bkash_icon.png";
 
 const BookingPage = () => {
   const location = useLocation();
   const service = location.state?.service || {}; // Get service data from state
   const [selectedPlan, setSelectedPlan] = useState("regular");
+  const [paymentMethod, setPaymentMethod] = useState("Cash On Service");
+
+  // Payment methods with icons
+  const paymentMethods = [
+    { name: "Visa", icon: visaIcon },
+    { name: "Bkash", icon: bkashIcon },
+    { name: "Cash On Service", icon: null },
+  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,9 +47,7 @@ const BookingPage = () => {
               <button
                 key={plan}
                 className={`p-3 rounded-lg text-center text-white font-semibold ${
-                  selectedPlan === plan
-                    ? "bg-teal-600"
-                    : "bg-teal-400 hover:bg-teal-500"
+                  selectedPlan === plan ? "bg-teal-600" : "bg-teal-400 hover:bg-teal-500"
                 }`}
                 onClick={() => setSelectedPlan(plan)}
               >
@@ -71,6 +79,7 @@ const BookingPage = () => {
               required
             />
           </div>
+
           <div>
             <label className="block text-gray-700 font-semibold">Address</label>
             <input
@@ -88,6 +97,28 @@ const BookingPage = () => {
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
+          </div>
+
+          {/* Payment Methods */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Select Payment Method</h3>
+            <div className="grid grid-cols-3 gap-4">
+              {paymentMethods.map((method) => (
+                <button
+                  key={method.name}
+                  className={`flex items-center justify-center gap-2 p-3 rounded-lg font-semibold w-full ${
+                    paymentMethod === method.name ? "bg-teal-600 text-white" : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPaymentMethod(method.name);
+                  }}
+                >
+                  {method.icon && <img src={method.icon} alt={method.name} className="w-6 h-6" />}
+                  {method.name}
+                </button>
+              ))}
+            </div>
           </div>
 
           <button className="w-full bg-teal-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-teal-600 transition">
