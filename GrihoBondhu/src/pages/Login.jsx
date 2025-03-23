@@ -1,16 +1,50 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Make sure you install axios
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const userData = {
+      email,
+      password,
+      ...(currentState === "Sign Up" && { name, phone }), // Include name and phone only for sign up
+    };
+
+    try {
+      const url =
+        currentState === "Login" ? "http://localhost:4000/api/user/login" : "http://localhost:4000/api/user/register";
+
+      const response = await axios.post(url, userData);
+      setLoading(false);
+
+      if (response.data.success) {
+        // Handle success, e.g., save the token in localStorage, redirect user, etc.
+        alert(`${currentState} successful!`);
+        console.log(response.data);
+      } else {
+        setError(response.data.message);
+      }
+    } catch (err) {
+      setLoading(false);
+      setError("Something went wrong. Please try again later.");
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scrolls to top when page loads
+    window.scrollTo(0, 0); // Scroll to top when page loads
   }, []);
-  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -41,6 +75,8 @@ const Login = () => {
             type="text"
             className="w-full px-4 py-3 border border-white/30 rounded-lg bg-white/10 placeholder-white focus:outline-none focus:ring-2 focus:ring-white mb-3"
             placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         )}
@@ -48,6 +84,8 @@ const Login = () => {
           type="email"
           className="w-full px-4 py-3 border border-white/30 rounded-lg bg-white/10 placeholder-white focus:outline-none focus:ring-2 focus:ring-white mb-3"
           placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         {currentState === "Login" ? null : (
@@ -55,6 +93,8 @@ const Login = () => {
             type="number"
             className="w-full px-4 py-3 border border-white/30 rounded-lg bg-white/10 placeholder-white focus:outline-none focus:ring-2 focus:ring-white mb-3"
             placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
           />
         )}
@@ -62,6 +102,8 @@ const Login = () => {
           type="password"
           className="w-full px-4 py-3 border border-white/30 rounded-lg bg-white/10 placeholder-white focus:outline-none focus:ring-2 focus:ring-white mb-3"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
 
@@ -78,9 +120,15 @@ const Login = () => {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
         {/* Submit Button */}
-        <button className="bg-white text-teal-600 font-medium px-6 py-3 mt-5 w-full rounded-lg transition-transform transform hover:scale-105 shadow-lg">
-          {currentState === "Login" ? "Login" : "Sign Up"}
+        <button
+          className="bg-white text-teal-600 font-medium px-6 py-3 mt-5 w-full rounded-lg transition-transform transform hover:scale-105 shadow-lg"
+          disabled={loading}
+        >
+          {loading ? "Processing..." : currentState === "Login" ? "Login" : "Sign Up"}
         </button>
       </form>
     </div>
