@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Correct import
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
-  const navigate = useNavigate(); // ✅ Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   const [currentState, setCurrentState] = useState("Sign Up");
   const [email, setEmail] = useState("");
@@ -34,15 +36,17 @@ const Login = () => {
       setLoading(false);
 
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token); // ✅ Store token
-        alert(`${currentState} successful!`);
-        navigate("/"); // ✅ Redirect to home after login/signup
+        localStorage.setItem("token", response.data.token);
+        toast.success(`${currentState} successful!`, { position: "top-right" }); // ✅ Show toast notification
+        setTimeout(() => navigate("/"), 2000); // Redirect after 2s
       } else {
         setError(response.data.message);
+        toast.error(response.data.message, { position: "top-right" }); // ❌ Show error toast
       }
     } catch (err) {
       setLoading(false);
       setError("Something went wrong. Please try again later.");
+      toast.error("Something went wrong. Please try again later.", { position: "top-right" });
       console.error(err);
     }
   };
@@ -54,6 +58,8 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <form onSubmit={onSubmitHandler} className="bg-teal-600 text-white shadow-lg rounded-2xl p-8 w-[90%] sm:max-w-md">
+        <ToastContainer /> {/* ✅ Add ToastContainer here */}
+
         <div className="flex justify-between items-center mb-6">
           <p className="text-3xl font-semibold">{currentState}</p>
           <div

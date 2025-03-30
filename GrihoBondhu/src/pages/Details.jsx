@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {  useState, useEffect } from "react";
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";
 import car from "../assets/car_1.jpg";
@@ -36,6 +36,10 @@ const ServiceDetailsPage = () => {
   const relatedServices = services.filter(
     (relatedService) => relatedService.category === service.category && relatedService.id !== service.id
   );
+
+ useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen p-6 mt-20">
