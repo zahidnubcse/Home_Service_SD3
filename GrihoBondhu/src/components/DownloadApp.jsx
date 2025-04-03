@@ -2,6 +2,7 @@ import React from "react";
 import mobile from "../assets/mobile_app.png";
 import App_store from "../assets/app_store.png";
 import Play_store from "../assets/play_store.png";
+import { Link } from "react-router-dom";
 
 const DownloadApp = () => {
   return (
@@ -18,16 +19,20 @@ const DownloadApp = () => {
           Get exclusive discounts and seamless booking with our mobile app. Enjoy a faster and more convenient experience!
         </p>
         <div className="flex gap-4 justify-center md:justify-start mt-5">
-          <img
+        <Link to="/app">
+        <img
             src={App_store}
             alt="App Store"
             className="w-36 cursor-pointer transition-all duration-300  rounded-lg hover:shadow-[0px_0px_15px_#008080]"
           />
-          <img
+        </Link>
+         <Link to="/app">
+         <img
             src={Play_store}
             alt="Play Store"
             className="w-36 cursor-pointer transition-all duration-300 rounded-lg hover:shadow-[0px_0px_15px_#008080]"
           />
+          </Link>
         </div>
       </div>
     </div>

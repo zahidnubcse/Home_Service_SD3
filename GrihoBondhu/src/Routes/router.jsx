@@ -8,12 +8,16 @@ import BookingPage from "../pages/BookingPage";
 import About from "../pages/About";
 import ServiceDetailsPage from "../pages/Details";
 import ProtectedRoute from "../components/ProtectedRoute"; // Import ProtectedRoute
+import AppSection from "../pages/AppSection";
+ 
 
 const mainRoutes = [
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
   { path: "/contact", element: <ContactPage /> },
   { path: "/about", element: <About /> },
+  { path: "/app", element: <AppSection/>},
+  
 
   // Protected Routes
   {
