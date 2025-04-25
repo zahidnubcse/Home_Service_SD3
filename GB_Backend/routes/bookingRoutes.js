@@ -1,12 +1,16 @@
 import express from 'express';
-import {confirmBooking, confirmBookingBkash, confirmBookingVisa, allBookings, userBookings, updateStatus} from '../controllers/bookingContoller.js'
+import {
+  createBooking,
+  getAllBookings,
+  getBookingById,
+  updatePaymentStatus
+} from '../controllers/bookingController.js';
 
-const bookigRouter = express.Router()
+const router = express.Router();
 
-//admin feature
-bookigRouter.post('/list',allBookings)
-bookigRouter.post('/status',updateStatus);
+router.post('/', createBooking);
+router.get('/', getAllBookings);
+router.get('/:id', getBookingById);
+router.put('/:id/pay', updatePaymentStatus);
 
-
-//payment feature
-bookigRouter.post ('/booking'.confirmBooking)
+export default router;
