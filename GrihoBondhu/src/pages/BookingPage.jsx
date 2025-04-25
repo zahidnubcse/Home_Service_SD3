@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import visaIcon from "../assets/visa_icon.png";
 import bkashIcon from "../assets/bkash_icon.png";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const BookingPage = () => {
   const location = useLocation();
-  const service = location.state?.service || {}; // Get service data from state
+  const service = location.state?.service || {};
+
   const [selectedPlan, setSelectedPlan] = useState("regular");
   const [paymentMethod, setPaymentMethod] = useState("Cash On Service");
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [bookingDate, setBookingDate] = useState("");
 
   // Payment methods with icons
   const paymentMethods = [
@@ -19,6 +27,32 @@ const BookingPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const bookingData = {
+      service: service.name,
+      serviceImage: service.image,
+      plan: selectedPlan,
+      price: service.price?.[selectedPlan],
+      fullName,
+      email,
+      address,
+      bookingDate,
+      paymentMethod,
+      transactionId: null, // Optional, for Bkash/Visa
+    };
+
+    try {
+      const res = await axios.post("http://localhost:4000/api/bookings", bookingData);
+      toast.success("Booking confirmed!");
+      console.log("Booking success:", res.data);
+    } catch (error) {
+      toast.error("Booking failed!");
+      console.error("Booking error:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gray-100 mt-20">
@@ -46,6 +80,7 @@ const BookingPage = () => {
             {["regular", "standard", "premium"].map((plan) => (
               <button
                 key={plan}
+                type="button"
                 className={`p-3 rounded-lg text-center text-white font-semibold ${
                   selectedPlan === plan ? "bg-teal-600" : "bg-teal-400 hover:bg-teal-500"
                 }`}
@@ -59,11 +94,13 @@ const BookingPage = () => {
         </div>
 
         {/* Booking Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-gray-700 font-semibold">Full Name</label>
             <input
               type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Your Name"
               required
@@ -74,6 +111,8 @@ const BookingPage = () => {
             <label className="block text-gray-700 font-semibold">Email</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Your Email"
               required
@@ -84,6 +123,8 @@ const BookingPage = () => {
             <label className="block text-gray-700 font-semibold">Address</label>
             <input
               type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Your Address"
               required
@@ -94,6 +135,8 @@ const BookingPage = () => {
             <label className="block text-gray-700 font-semibold">Booking Date</label>
             <input
               type="date"
+              value={bookingDate}
+              onChange={(e) => setBookingDate(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
@@ -106,13 +149,13 @@ const BookingPage = () => {
               {paymentMethods.map((method) => (
                 <button
                   key={method.name}
+                  type="button"
                   className={`flex items-center justify-center gap-2 p-3 rounded-lg font-semibold w-full ${
-                    paymentMethod === method.name ? "bg-teal-600 text-white" : "bg-gray-300 hover:bg-gray-400"
+                    paymentMethod === method.name
+                      ? "bg-teal-600 text-white"
+                      : "bg-gray-300 hover:bg-gray-400"
                   }`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setPaymentMethod(method.name);
-                  }}
+                  onClick={() => setPaymentMethod(method.name)}
                 >
                   {method.icon && <img src={method.icon} alt={method.name} className="w-6 h-6" />}
                   {method.name}
@@ -121,7 +164,10 @@ const BookingPage = () => {
             </div>
           </div>
 
-          <button className="w-full bg-teal-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-teal-600 transition">
+          <button
+            type="submit"
+            className="w-full bg-teal-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-teal-600 transition"
+          >
             Confirm Booking (৳{service.price?.[selectedPlan]})
           </button>
         </form>

@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios"; // ✅ Import axios for API calls
-import { toast } from "react-toastify"; // ✅ Import Toastify
-import "react-toastify/dist/ReactToastify.css"; // ✅ Import Toastify styles
+import axios from "axios";  
+import { toast } from "react-toastify";  
+import "react-toastify/dist/ReactToastify.css";  
 
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";

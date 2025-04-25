@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import about from "../assets/about.jpg";
 
 const About = () => {
+
+  useEffect(() => {
+        window.scrollTo(0, 0); // Scrolls to top when page loads
+      }, []);
   return (
     <div className="flex flex-col md:flex-row items-center justify-center gap-10 p-6 mt-20">
       {/* Left Side - Image with Glow Effect */}

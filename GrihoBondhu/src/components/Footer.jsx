@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../assets/logo.png";
 import { FaFacebookF, FaGoogle, FaXTwitter } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link, Links } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -22,8 +22,8 @@ const Footer = () => {
         <div className="text-center md:text-left">
           <p className="text-lg font-semibold mb-4">Company</p>
           <ul className="space-y-2">
-            <li className="hover:text-gray-200 transition-all cursor-pointer">Home</li>
-            <li className="hover:text-gray-200 transition-all cursor-pointer">Services</li>
+           <Link to='/home' className=""> <li className="hover:text-gray-200 transition-all cursor-pointer">Home</li> </Link>
+           <Link to='/services'><li className="hover:text-gray-200 transition-all cursor-pointer">Services</li> </Link>
             <li className="hover:text-gray-200 transition-all cursor-pointer">Bookings</li>
             <li className="hover:text-gray-200 transition-all cursor-pointer">Privacy Policy</li>
           </ul>
