@@ -78,39 +78,41 @@ const ServiceDetailsPage = () => {
     fetchReviews();
   }, []);
 
-  const fetchReviews = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/api/reviews/${serviceId}`
-      );
-      setReviews(response.data);
-      toast.success("Reviews loaded successfully!"); // ✅ Success toast after fetching reviews
-    } catch (error) {
-      console.error("Error fetching reviews", error);
-      toast.error("Failed to load reviews!"); // ✅ Error toast if fetching fails
-    }
-  };
+// Fetch reviews - NO toast here
+const fetchReviews = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/api/reviews/${serviceId}`
+    );
+    setReviews(response.data);
+  } catch (error) {
+    console.error("Error fetching reviews", error);
+    // Optional: only show error once
+    toast.error("Failed to load reviews! Try again later.");
+  }
+};
 
-  // ✅ Submit a review
-  const handleSubmitReview = async (e) => {
-    e.preventDefault();
-    if (review.name && review.rating && review.comment) {
-      try {
-        await axios.post("http://localhost:4000/api/reviews", {
-          serviceId: service.id,
-          name: review.name,
-          rating: review.rating,
-          comment: review.comment,
-        });
-        setReview({ name: "", rating: "", comment: "" });
-        fetchReviews(); // ✅ Refresh reviews after submission
-        toast.success("Review submitted successfully!"); // ✅ Success toast after submitting review
-      } catch (error) {
-        console.error("Error submitting review", error);
-        toast.error("Failed to submit review! Try again."); // ✅ Error toast if submission fails
-      }
+// Only show toast when user submits a review
+const handleSubmitReview = async (e) => {
+  e.preventDefault();
+  if (review.name && review.rating && review.comment) {
+    try {
+      await axios.post("http://localhost:4000/api/reviews", {
+        serviceId: service.id,
+        name: review.name,
+        rating: Number(review.rating), // ensure number type
+        comment: review.comment,
+      });
+      setReview({ name: "", rating: "", comment: "" });
+      fetchReviews(); // refresh reviews silently
+      toast.success("Review submitted successfully!"); // ✅ Only here
+    } catch (error) {
+      console.error("Error submitting review", error);
+      toast.error("Failed to submit review! Try again.");
     }
-  };
+  }
+};
+
 
   const relatedServices = services.filter(
     (relatedService) =>
