@@ -25,7 +25,7 @@ app.use(cors());
 app.use("/api/user", userRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/subscribers", subscriberRoutes);
-app.use("/api/bookings", bookingRoutes)
+app.use("/api/bookings", bookingRoutes);
  
 
 app.get("/", (req, res) => {
