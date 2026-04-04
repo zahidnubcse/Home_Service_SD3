@@ -4,50 +4,68 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// ✅ create axios instance
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+});
+
 const Login = () => {
   const navigate = useNavigate();
 
-  const [currentState, setCurrentState] = useState("Sign Up");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [error, setError] = useState("");
+  const [currentState, setCurrentState] = useState("Login");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
+
   const [loading, setLoading] = useState(false);
 
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
+  // ✅ handle input change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const userData = {
-      email,
-      password,
-      ...(currentState === "Sign Up" && { name, phone }),
-    };
+  // ✅ submit handler
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
     try {
-      const url =
+      const endpoint =
         currentState === "Login"
-          ? "http://localhost:4000/api/user/login"
-          : "http://localhost:4000/api/user/register";
+          ? "/api/user/login"
+          : "/api/user/register";
 
-      const response = await axios.post(url, userData);
-      setLoading(false);
+      const response = await API.post(endpoint, formData);
 
       if (response.data.success) {
+        // ✅ store token
         localStorage.setItem("token", response.data.token);
-        toast.success(`${currentState} successful!`, { position: "top-right" }); // ✅ Show toast notification
-        setTimeout(() => navigate("/"), 2000); // Redirect after 2s
+
+        // ✅ optional: store user
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        toast.success(`${currentState} successful 🎉`);
+
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       } else {
-        setError(response.data.message);
-        toast.error(response.data.message, { position: "top-right" }); // ❌ Show error toast
+        toast.error(response.data.message || "Something went wrong");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error.response?.data?.message || "Server error, try again later"
+      );
+    } finally {
       setLoading(false);
-      setError("Something went wrong. Please try again later.");
-      toast.error("Something went wrong. Please try again later.", { position: "top-right" });
-      console.error(err);
     }
   };
 
@@ -57,41 +75,109 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form onSubmit={onSubmitHandler} className="bg-teal-600 text-white shadow-lg rounded-2xl p-8 w-[90%] sm:max-w-md">
-        <ToastContainer /> {/* ✅ Add ToastContainer here */}
+      <form
+        onSubmit={onSubmitHandler}
+        className="bg-teal-600 text-white shadow-lg rounded-2xl p-8 w-[90%] sm:max-w-md"
+      >
+        <ToastContainer />
 
+        {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
           <p className="text-3xl font-semibold">{currentState}</p>
+
           <div
+            onClick={() =>
+              setCurrentState(
+                currentState === "Login" ? "Sign Up" : "Login"
+              )
+            }
             className="cursor-pointer p-1 bg-white rounded-full flex items-center w-14"
-            onClick={() => setCurrentState(currentState === "Login" ? "Sign Up" : "Login")}
           >
             <div
-              className={`h-6 w-6 bg-teal-600 rounded-full transition-all ${currentState === "Login" ? "translate-x-6" : ""}`}
-            ></div>
+              className={`h-6 w-6 bg-teal-600 rounded-full transition-all ${
+                currentState === "Login" ? "translate-x-6" : ""
+              }`}
+            />
           </div>
         </div>
 
-        {currentState !== "Login" && (
-          <input type="text" className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+        {/* NAME */}
+        {currentState === "Sign Up" && (
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3"
+            required
+          />
         )}
-        <input type="email" className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        {currentState !== "Login" && (
-          <input type="number" className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-        )}
-        <input type="password" className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
+        {/* EMAIL */}
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3"
+          required
+        />
+
+        {/* PHONE */}
+        {currentState === "Sign Up" && (
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3"
+            required
+          />
+        )}
+
+        {/* PASSWORD */}
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full px-4 py-3 border rounded-lg bg-white/10 mb-3"
+          required
+        />
+
+        {/* OPTIONS */}
         <div className="flex justify-between text-sm">
-          <p className="cursor-pointer hover:underline">Forgot password?</p>
-          <p onClick={() => setCurrentState(currentState === "Login" ? "Sign Up" : "Login")} className="cursor-pointer hover:underline">
-            {currentState === "Login" ? "Create account" : "Login Here"}
+          <p className="cursor-pointer hover:underline">
+            Forgot password?
+          </p>
+          <p
+            onClick={() =>
+              setCurrentState(
+                currentState === "Login" ? "Sign Up" : "Login"
+              )
+            }
+            className="cursor-pointer hover:underline"
+          >
+            {currentState === "Login"
+              ? "Create account"
+              : "Login Here"}
           </p>
         </div>
 
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
-        <button className="bg-white text-teal-600 font-medium px-6 py-3 mt-5 w-full rounded-lg transition-transform transform hover:scale-105 shadow-lg" disabled={loading}>
-          {loading ? "Processing..." : currentState === "Login" ? "Login" : "Sign Up"}
+        {/* BUTTON */}
+        <button
+          disabled={loading}
+          className="bg-white text-teal-600 font-medium px-6 py-3 mt-5 w-full rounded-lg transition-transform hover:scale-105 shadow-lg"
+        >
+          {loading
+            ? "Processing..."
+            : currentState === "Login"
+            ? "Login"
+            : "Sign Up"}
         </button>
       </form>
     </div>

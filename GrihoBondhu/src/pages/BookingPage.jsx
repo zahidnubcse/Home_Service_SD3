@@ -5,52 +5,94 @@ import bkashIcon from "../assets/bkash_icon.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// ✅ axios instance
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+});
+
 const BookingPage = () => {
   const location = useLocation();
   const service = location.state?.service || {};
 
   const [selectedPlan, setSelectedPlan] = useState("regular");
   const [paymentMethod, setPaymentMethod] = useState("Cash On Service");
+  const [loading, setLoading] = useState(false);
 
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [bookingDate, setBookingDate] = useState("");
+  // ✅ form state (clean)
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    address: "",
+    bookingDate: "",
+  });
 
-  // Payment methods with icons
+  // ✅ auto fill user if logged in
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: user.name || "",
+        email: user.email || "",
+      }));
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // payment methods
   const paymentMethods = [
     { name: "Visa", icon: visaIcon },
     { name: "Bkash", icon: bkashIcon },
     { name: "Cash On Service", icon: null },
   ];
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const token = localStorage.getItem("token");
 
     const bookingData = {
       service: service.name,
       serviceImage: service.image,
       plan: selectedPlan,
       price: service.price?.[selectedPlan],
-      fullName,
-      email,
-      address,
-      bookingDate,
+      ...formData,
       paymentMethod,
-      transactionId: null, // Optional, for Bkash/Visa
+      transactionId: null,
     };
 
     try {
-      const res = await axios.post("http://localhost:4000/api/bookings", bookingData);
-      toast.success("Booking confirmed!");
-      console.log("Booking success:", res.data);
+      const res = await API.post("/api/bookings", bookingData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ auth added
+        },
+      });
+
+      toast.success("Booking confirmed 🎉");
+
+      // ✅ reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        address: "",
+        bookingDate: "",
+      });
+
     } catch (error) {
-      toast.error("Booking failed!");
-      console.error("Booking error:", error);
+      console.error(error);
+      toast.error(
+        error.response?.data?.message || "Booking failed!"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +100,7 @@ const BookingPage = () => {
     <div className="min-h-screen flex items-center justify-center p-6 bg-gray-100 mt-20">
       <div className="bg-white shadow-lg rounded-2xl p-8 max-w-2xl w-full">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Confirm Your <span className="text-primary">Booking</span>
+          Confirm Your <span className="text-teal-600">Booking</span>
         </h2>
 
         {/* Service Details */}
@@ -70,21 +112,27 @@ const BookingPage = () => {
           />
           <h2 className="text-2xl font-semibold">{service.name}</h2>
           <p className="text-gray-600">{service.description}</p>
-          <p className="text-yellow-500 font-semibold mt-2">⭐ {service.rating}</p>
+          <p className="text-yellow-500 font-semibold mt-2">
+            ⭐ {service.rating}
+          </p>
         </div>
 
-        {/* Pricing Plans */}
+        {/* Plans */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Choose Your Plan</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Choose Your Plan
+          </h3>
           <div className="grid grid-cols-3 gap-4">
             {["regular", "standard", "premium"].map((plan) => (
               <button
                 key={plan}
                 type="button"
-                className={`p-3 rounded-lg text-center text-white font-semibold ${
-                  selectedPlan === plan ? "bg-teal-600" : "bg-teal-400 hover:bg-teal-500"
-                }`}
                 onClick={() => setSelectedPlan(plan)}
+                className={`p-3 rounded-lg text-white font-semibold ${
+                  selectedPlan === plan
+                    ? "bg-teal-600"
+                    : "bg-teal-400 hover:bg-teal-500"
+                }`}
               >
                 {plan.charAt(0).toUpperCase() + plan.slice(1)} <br />
                 ৳{service.price?.[plan]}
@@ -93,82 +141,86 @@ const BookingPage = () => {
           </div>
         </div>
 
-        {/* Booking Form */}
+        {/* FORM */}
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-gray-700 font-semibold">Full Name</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Your Name"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            placeholder="Full Name"
+            className="w-full p-3 border rounded-lg"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 font-semibold">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Your Email"
-              required
-            />
-          </div>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full p-3 border rounded-lg"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 font-semibold">Address</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Your Address"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Address"
+            className="w-full p-3 border rounded-lg"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 font-semibold">Booking Date</label>
-            <input
-              type="date"
-              value={bookingDate}
-              onChange={(e) => setBookingDate(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              required
-            />
-          </div>
+          <input
+            type="date"
+            name="bookingDate"
+            value={formData.bookingDate}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+            required
+          />
 
-          {/* Payment Methods */}
+          {/* Payment */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Select Payment Method</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Select Payment Method
+            </h3>
             <div className="grid grid-cols-3 gap-4">
               {paymentMethods.map((method) => (
                 <button
                   key={method.name}
                   type="button"
-                  className={`flex items-center justify-center gap-2 p-3 rounded-lg font-semibold w-full ${
+                  onClick={() => setPaymentMethod(method.name)}
+                  className={`flex items-center justify-center gap-2 p-3 rounded-lg font-semibold ${
                     paymentMethod === method.name
                       ? "bg-teal-600 text-white"
                       : "bg-gray-300 hover:bg-gray-400"
                   }`}
-                  onClick={() => setPaymentMethod(method.name)}
                 >
-                  {method.icon && <img src={method.icon} alt={method.name} className="w-6 h-6" />}
+                  {method.icon && (
+                    <img
+                      src={method.icon}
+                      alt={method.name}
+                      className="w-6 h-6"
+                    />
+                  )}
                   {method.name}
                 </button>
               ))}
             </div>
           </div>
 
+          {/* BUTTON */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-teal-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-teal-600 transition"
           >
-            Confirm Booking (৳{service.price?.[selectedPlan]})
+            {loading
+              ? "Processing..."
+              : `Confirm Booking (৳${service.price?.[selectedPlan]})`}
           </button>
         </form>
       </div>

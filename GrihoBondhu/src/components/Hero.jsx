@@ -38,7 +38,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-14 pb-7 mt-5">
+    <div className="flex flex-col items-center justify-center pt-14 pb-7 mt-40">
       {/* Hero Heading */}
       <h2 className="font-bold text-[46px] text-center">
         Find The Best Home <span className="text-primary">Services/Repair</span> <br />

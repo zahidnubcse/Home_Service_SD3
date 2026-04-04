@@ -1,14 +1,18 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";  
-import { toast } from "react-toastify";  
-import "react-toastify/dist/ReactToastify.css";  
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import clean from "../assets/clean_1.jpg";
 import plumbing from "../assets/plum_1.jpg";
 import car from "../assets/car_1.jpg";
 import pest from "../assets/pest_1.jpg";
 import clean1 from "../assets/clean_2.jpg";
+
+// ✅ API instance
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+});
 
 const services = [
   {
@@ -51,7 +55,7 @@ const services = [
     id: 5,
     name: "Kitchen Cleaning",
     category: "Home Cleaning",
-    description: "Professional home cleaning services.",
+    description: "Professional kitchen cleaning.",
     rating: 4.8,
     image: clean1,
     price: { regular: 20, standard: 35, premium: 50 },
@@ -61,172 +65,211 @@ const services = [
 const ServiceDetailsPage = () => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
+
   const service = services.find(
-    (service) => service.id === parseInt(serviceId)
+    (s) => s.id === parseInt(serviceId)
   );
 
   const [reviews, setReviews] = useState([]);
-  const [review, setReview] = useState({ name: "", rating: "", comment: "" });
+  const [loadingReviews, setLoadingReviews] = useState(true);
 
-  if (!service) {
-    return <div>Service not found!</div>;
-  }
+  const [review, setReview] = useState({
+    name: "",
+    rating: "",
+    comment: "",
+  });
 
-  // ✅ Fetch reviews from backend
+  // ✅ Fetch reviews
+  const fetchReviews = async () => {
+    try {
+      setLoadingReviews(true);
+      const res = await API.get(`/api/reviews/${serviceId}`);
+      setReviews(res.data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load reviews!");
+    } finally {
+      setLoadingReviews(false);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchReviews();
-  }, []);
+  }, [serviceId]);
 
-// Fetch reviews - NO toast here
-const fetchReviews = async () => {
-  try {
-    const response = await axios.get(
-      `http://localhost:4000/api/reviews/${serviceId}`
-    );
-    setReviews(response.data);
-  } catch (error) {
-    console.error("Error fetching reviews", error);
-    // Optional: only show error once
-    toast.error("Failed to load reviews! Try again later.");
-  }
-};
+  // ✅ Submit review
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
 
-// Only show toast when user submits a review
-const handleSubmitReview = async (e) => {
-  e.preventDefault();
-  if (review.name && review.rating && review.comment) {
     try {
-      await axios.post("http://localhost:4000/api/reviews", {
+      await API.post("/api/reviews", {
         serviceId: service.id,
         name: review.name,
-        rating: Number(review.rating), // ensure number type
+        rating: Number(review.rating),
         comment: review.comment,
       });
-      setReview({ name: "", rating: "", comment: "" });
-      fetchReviews(); // refresh reviews silently
-      toast.success("Review submitted successfully!"); // ✅ Only here
-    } catch (error) {
-      console.error("Error submitting review", error);
-      toast.error("Failed to submit review! Try again.");
-    }
-  }
-};
 
+      toast.success("Review submitted 🎉");
+
+      setReview({ name: "", rating: "", comment: "" });
+      fetchReviews();
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to submit review!");
+    }
+  };
+
+  if (!service) {
+    return <div className="text-center mt-20">Service not found!</div>;
+  }
 
   const relatedServices = services.filter(
-    (relatedService) =>
-      relatedService.category === service.category &&
-      relatedService.id !== service.id
+    (s) =>
+      s.category === service.category && s.id !== service.id
   );
 
   return (
     <div className="min-h-screen p-6 mt-20">
-      <div className="bg-white p-6 rounded-lg">
+      <div className="bg-white p-6 rounded-lg shadow">
+
+        {/* TITLE */}
         <h1 className="text-3xl font-bold">{service.name}</h1>
 
-        <div className="mt-4 mb-6 flex flex-col md:flex-row">
+        {/* MAIN */}
+        <div className="mt-6 flex flex-col md:flex-row gap-6">
           <img
             src={service.image}
             alt={service.name}
-            className="w-full md:w-1/3 h-auto object-contain rounded-lg shadow-lg mb-6 md:mb-0 md:mr-6"
+            className="w-full md:w-1/3 rounded-lg shadow"
           />
+
           <div>
             <p className="text-gray-600">{service.description}</p>
-            <p className="mt-4 text-yellow-500 font-semibold">
+            <p className="mt-3 text-yellow-500 font-semibold">
               ⭐ {service.rating}
             </p>
-            <h2 className="mt-4 text-2xl font-semibold">Price</h2>
-            <ul className="mt-2">
+
+            <h2 className="mt-4 text-xl font-semibold">Pricing</h2>
+            <ul className="mt-2 space-y-1">
               <li>Regular: ৳{service.price.regular}</li>
               <li>Standard: ৳{service.price.standard}</li>
               <li>Premium: ৳{service.price.premium}</li>
             </ul>
+
             <button
               onClick={() =>
-                navigate(`/booking/${service.id}`, { state: { service } })
+                navigate(`/booking/${service.id}`, {
+                  state: { service },
+                })
               }
-              className="mt-4 bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300"
+              className="mt-5 bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600"
             >
               Book Now
             </button>
           </div>
         </div>
 
-        {/* ✅ Display Customer Reviews */}
-        <h3 className="mt-6 text-xl font-semibold">Customer Reviews</h3>
-        <ul className="mt-4">
-          {reviews.length > 0 ? (
-            reviews.map((rev, index) => (
-              <li key={index} className="border-b py-2">
-                <p className="font-bold">
-                  {rev.name} - ⭐ {rev.rating}
-                </p>
-                <p>{rev.comment}</p>
-              </li>
-            ))
-          ) : (
-            <p>No reviews yet. Be the first to review!</p>
-          )}
-        </ul>
+        {/* REVIEWS */}
+        <h3 className="mt-8 text-xl font-semibold">
+          Customer Reviews
+        </h3>
 
-        {/* ✅ Leave a Review */}
-        <h3 className="mt-6 text-xl font-semibold">Leave a Review</h3>
-        <form onSubmit={handleSubmitReview} className="mt-4 space-y-4 w-80">
+        {loadingReviews ? (
+          <p className="mt-2 text-gray-500">Loading reviews...</p>
+        ) : reviews.length > 0 ? (
+          <ul className="mt-4 space-y-3">
+            {reviews.map((rev, i) => (
+              <li key={i} className="border p-3 rounded-lg">
+                <p className="font-semibold">
+                  {rev.name} ⭐ {rev.rating}
+                </p>
+                <p className="text-gray-600">{rev.comment}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-2 text-gray-500">
+            No reviews yet.
+          </p>
+        )}
+
+        {/* REVIEW FORM */}
+        <h3 className="mt-8 text-xl font-semibold">
+          Leave a Review
+        </h3>
+
+        <form
+          onSubmit={handleSubmitReview}
+          className="mt-4 space-y-3 max-w-sm"
+        >
           <input
             type="text"
             placeholder="Your Name"
             value={review.name}
-            onChange={(e) => setReview({ ...review, name: e.target.value })}
+            onChange={(e) =>
+              setReview({ ...review, name: e.target.value })
+            }
             className="w-full p-2 border rounded"
             required
           />
+
           <input
             type="number"
-            placeholder="Rating (1-5)"
             min="1"
             max="5"
+            placeholder="Rating (1-5)"
             value={review.rating}
-            onChange={(e) => setReview({ ...review, rating: e.target.value })}
+            onChange={(e) =>
+              setReview({ ...review, rating: e.target.value })
+            }
             className="w-full p-2 border rounded"
             required
           />
+
           <textarea
             placeholder="Your Review"
             value={review.comment}
-            onChange={(e) => setReview({ ...review, comment: e.target.value })}
+            onChange={(e) =>
+              setReview({ ...review, comment: e.target.value })
+            }
             className="w-full p-2 border rounded"
             required
-          ></textarea>
-          <button
-            type="submit"
-            className="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition duration-300"
-          >
+          />
+
+          <button className="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600">
             Submit Review
           </button>
         </form>
 
-        {/* ✅ Related Services */}
-        <h3 className="mt-6 text-xl font-semibold">Related Services</h3>
+        {/* RELATED */}
+        <h3 className="mt-8 text-xl font-semibold">
+          Related Services
+        </h3>
+
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 mt-4">
-          {relatedServices.map((relatedService) => (
+          {relatedServices.map((s) => (
             <div
-              key={relatedService.id}
-              className="bg-white p-4 rounded-lg shadow-md hover:shadow-primary cursor-pointer"
-              onClick={() => navigate(`/details/${relatedService.id}`)}
+              key={s.id}
+              onClick={() => navigate(`/details/${s.id}`)}
+              className="bg-white p-4 rounded-lg shadow hover:shadow-lg cursor-pointer"
             >
               <img
-                src={relatedService.image}
-                alt={relatedService.name}
-                className="w-full h-40 object-cover rounded-lg"
+                src={s.image}
+                alt={s.name}
+                className="w-full h-40 object-cover rounded"
               />
-              <h4 className="text-xl font-semibold mt-4">
-                {relatedService.name}
+              <h4 className="text-lg font-semibold mt-3">
+                {s.name}
               </h4>
-              <p className="text-gray-600">{relatedService.description}</p>
+              <p className="text-gray-600 text-sm">
+                {s.description}
+              </p>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
