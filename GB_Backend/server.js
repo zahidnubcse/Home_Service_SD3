@@ -28,5 +28,4 @@ app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// ✅ export instead of listen
 export default app;
