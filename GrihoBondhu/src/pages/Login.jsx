@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // ✅ create axios instance
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+  baseURL: import.meta.env.VITE_API_URL
 });
 
 const Login = () => {
