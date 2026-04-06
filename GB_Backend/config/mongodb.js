@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   if (!process.env.MONGODB_URI) {
-    console.error("MongoDB URI not set in environment variables");
-    return;
+    throw new Error("MongoDB URI not set");
   }
 
   try {
@@ -11,6 +10,7 @@ const connectDB = async () => {
     console.log("DB Connected");
   } catch (err) {
     console.error("MongoDB connection error:", err.message);
+    process.exit(1); // ❗ stop server
   }
 };
 
